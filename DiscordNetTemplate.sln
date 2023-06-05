@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.33711.374
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordNetTemplate", "DiscordNetTemplate\DiscordNetTemplate.csproj", "{20D94CE1-C307-4249-A2F0-2C16C9CB0EBE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{20D94CE1-C307-4249-A2F0-2C16C9CB0EBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20D94CE1-C307-4249-A2F0-2C16C9CB0EBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20D94CE1-C307-4249-A2F0-2C16C9CB0EBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20D94CE1-C307-4249-A2F0-2C16C9CB0EBE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {801BA12D-85F7-493E-B152-37CF1F9DDFB6}
+	EndGlobalSection
+EndGlobal
