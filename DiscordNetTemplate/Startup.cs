@@ -19,7 +19,7 @@ builder.ConfigureAppConfiguration(options
 
 var loggerConfig = new LoggerConfiguration()
     .WriteTo.Console()
-    .WriteTo.File($"logs/log-{DateTime.Now:dd.MM.yy_HH.mm}.log")
+    .WriteTo.File($"logs/log-{DateTime.Now:yy.MM.dd_HH.mm}.log")
     .CreateLogger();
 
 builder.ConfigureServices((host, services) =>
