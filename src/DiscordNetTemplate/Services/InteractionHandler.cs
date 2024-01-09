@@ -2,43 +2,30 @@ using System.Reflection;
 
 namespace DiscordNetTemplate.Services;
 
-public class InteractionHandler
+public class InteractionHandler(DiscordSocketClient client, InteractionService interactionService, IServiceProvider services, ILogger<InteractionHandler> logger)
 {
-    private readonly DiscordSocketClient _client;
-    private readonly InteractionService _interactionService;
-    private readonly IServiceProvider _services;
-    private readonly ILogger _logger;
-
-    public InteractionHandler(DiscordSocketClient client, InteractionService interactionService, IServiceProvider services, ILogger<InteractionHandler> logger)
+	public async Task InitializeAsync()
     {
-        _client = client;
-        _interactionService = interactionService;
-        _services = services;
-        _logger = logger;
-    }
+        await interactionService.AddModulesAsync(Assembly.GetEntryAssembly(), services);
 
-    public async Task InitializeAsync()
-    {
-        await _interactionService.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
-
-        _client.InteractionCreated += HandleInteraction;
-        _interactionService.InteractionExecuted += HandleInteractionExecuted;
+        client.InteractionCreated += HandleInteraction;
+        interactionService.InteractionExecuted += HandleInteractionExecuted;
     }
 
     private async Task HandleInteraction(SocketInteraction interaction)
     {
         try
         {
-            var context = new SocketInteractionContext(_client, interaction);
+            var context = new SocketInteractionContext(client, interaction);
 
-            var result = await _interactionService.ExecuteCommandAsync(context, _services);
+            var result = await interactionService.ExecuteCommandAsync(context, services);
 
             if (!result.IsSuccess)
                 _ = Task.Run(() => HandleInteractionExecutionResult(interaction, result));
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, ex.Message);
+            logger.LogError(ex, ex.Message);
         }
     }
 
@@ -54,31 +41,31 @@ public class InteractionHandler
         switch (result.Error)
         {
             case InteractionCommandError.UnmetPrecondition:
-                _logger.LogInformation($"Unmet precondition - {result.Error}");
+				logger.LogInformation($"Unmet precondition - {result.Error}");
                 break;
 
             case InteractionCommandError.BadArgs:
-                _logger.LogInformation($"Unmet precondition - {result.Error}");
+				logger.LogInformation($"Unmet precondition - {result.Error}");
                 break;
 
             case InteractionCommandError.ConvertFailed:
-                _logger.LogInformation($"Convert Failed - {result.Error}");
+				logger.LogInformation($"Convert Failed - {result.Error}");
                 break;
 
             case InteractionCommandError.Exception:
-                _logger.LogInformation($"Exception - {result.Error}");
+				logger.LogInformation($"Exception - {result.Error}");
                 break;
 
             case InteractionCommandError.ParseFailed:
-                _logger.LogInformation($"Parse Failed - {result.Error}");
+				logger.LogInformation($"Parse Failed - {result.Error}");
                 break;
 
             case InteractionCommandError.UnknownCommand:
-                _logger.LogInformation($"Unknown Command - {result.Error}");
+				logger.LogInformation($"Unknown Command - {result.Error}");
                 break;
 
             case InteractionCommandError.Unsuccessful:
-                _logger.LogInformation($"Unsuccessful - {result.Error}");
+				logger.LogInformation($"Unsuccessful - {result.Error}");
                 break;
         }
 
