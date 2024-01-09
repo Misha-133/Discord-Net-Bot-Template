@@ -13,7 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 
 
-var builder = new HostApplicationBuilder();
+var builder = new HostApplicationBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables("DNetTemplate_");
 
@@ -22,7 +22,8 @@ var loggerConfig = new LoggerConfiguration()
     .WriteTo.File($"logs/log-{DateTime.Now:yy.MM.dd_HH.mm}.log")
     .CreateLogger();
 
-builder.Services.AddLogging(options => options.AddSerilog(loggerConfig, dispose: true));
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(loggerConfig, dispose: true);
 
 builder.Services.AddSingleton(new DiscordSocketClient(
     new DiscordSocketConfig
