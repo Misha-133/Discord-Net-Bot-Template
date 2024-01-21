@@ -2,37 +2,35 @@
 
 namespace DiscordNetTemplate.Services;
 
-public class DiscordBotService(DiscordSocketClient client, InteractionService interactions, IConfiguration config, ILogger<DiscordBotService> logger, 
-	InteractionHandler interactionHandler) : BackgroundService
+public class DiscordBotService(DiscordSocketClient client, InteractionService interactions, IConfiguration config, ILogger<DiscordBotService> logger,
+    InteractionHandler interactionHandler) : BackgroundService
 {
-	private readonly ILogger _logger = logger;
-
-	protected override Task ExecuteAsync(CancellationToken cancellationToken)
+    protected override Task ExecuteAsync(CancellationToken cancellationToken)
     {
         client.Ready += ClientReady;
 
         client.Log += LogAsync;
         interactions.Log += LogAsync;
 
-		return interactionHandler.InitializeAsync()
-			.ContinueWith(t => client.LoginAsync(TokenType.Bot, config["Secrets:Discord"]), cancellationToken)
-			.ContinueWith(t => client.StartAsync(), cancellationToken);
+        return interactionHandler.InitializeAsync()
+            .ContinueWith(t => client.LoginAsync(TokenType.Bot, config["Secrets:Discord"]), cancellationToken)
+            .ContinueWith(t => client.StartAsync(), cancellationToken);
     }
 
     public override Task StopAsync(CancellationToken cancellationToken)
     {
-		if (ExecuteTask is null)
-			return Task.CompletedTask;
+        if (ExecuteTask is null)
+            return Task.CompletedTask;
 
-		base.StopAsync(cancellationToken);
-		return client.StopAsync();
+        base.StopAsync(cancellationToken);
+        return client.StopAsync();
     }
 
     private async Task ClientReady()
     {
-        _logger.LogInformation("Logged as {User}", client.CurrentUser);
+        logger.LogInformation("Logged as {User}", client.CurrentUser);
 
-		await interactions.RegisterCommandsGloballyAsync();
+        await interactions.RegisterCommandsGloballyAsync();
     }
 
     public Task LogAsync(LogMessage msg)
@@ -48,7 +46,7 @@ public class DiscordBotService(DiscordSocketClient client, InteractionService in
             _ => LogLevel.Information
         };
 
-        _logger.Log(severity, msg.Exception, msg.Message);
+        logger.Log(severity, msg.Exception, msg.Message);
 
         return Task.CompletedTask;
     }

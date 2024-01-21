@@ -4,7 +4,7 @@ namespace DiscordNetTemplate.Services;
 
 public class InteractionHandler(DiscordSocketClient client, InteractionService interactionService, IServiceProvider services, ILogger<InteractionHandler> logger)
 {
-	public async Task InitializeAsync()
+    public async Task InitializeAsync()
     {
         await interactionService.AddModulesAsync(Assembly.GetEntryAssembly(), services);
 
@@ -41,31 +41,31 @@ public class InteractionHandler(DiscordSocketClient client, InteractionService i
         switch (result.Error)
         {
             case InteractionCommandError.UnmetPrecondition:
-				logger.LogInformation($"Unmet precondition - {result.Error}");
+                logger.LogInformation($"Unmet precondition - {result.Error}");
                 break;
 
             case InteractionCommandError.BadArgs:
-				logger.LogInformation($"Unmet precondition - {result.Error}");
+                logger.LogInformation($"Unmet precondition - {result.Error}");
                 break;
 
             case InteractionCommandError.ConvertFailed:
-				logger.LogInformation($"Convert Failed - {result.Error}");
+                logger.LogInformation($"Convert Failed - {result.Error}");
                 break;
 
             case InteractionCommandError.Exception:
-				logger.LogInformation($"Exception - {result.Error}");
+                logger.LogInformation($"Exception - {result.Error}");
                 break;
 
             case InteractionCommandError.ParseFailed:
-				logger.LogInformation($"Parse Failed - {result.Error}");
+                logger.LogInformation($"Parse Failed - {result.Error}");
                 break;
 
             case InteractionCommandError.UnknownCommand:
-				logger.LogInformation($"Unknown Command - {result.Error}");
+                logger.LogInformation($"Unknown Command - {result.Error}");
                 break;
 
             case InteractionCommandError.Unsuccessful:
-				logger.LogInformation($"Unsuccessful - {result.Error}");
+                logger.LogInformation($"Unsuccessful - {result.Error}");
                 break;
         }
 
