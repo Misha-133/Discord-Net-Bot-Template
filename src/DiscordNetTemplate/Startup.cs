@@ -16,21 +16,22 @@ using Serilog;
 
 var builder = new HostApplicationBuilder(args);
 
-var a = builder.Environment;
-
 builder.Configuration
     .AddEnvironmentVariables("DOTNET_")
     .AddEnvironmentVariables("DNetTemplate_");
+
+// map config section to options class
+builder.Services.Configure<DiscordBotOptions>(builder.Configuration.GetSection("Discord"));
+
 
 var loggerConfig = new LoggerConfiguration()
     .WriteTo.Console()
     .WriteTo.File($"logs/log-{DateTime.Now:yy.MM.dd_HH.mm}.log")
     .CreateLogger();
 
-builder.Services.Configure<DiscordBotOptions>(builder.Configuration.GetSection("Discord"));
-
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(loggerConfig, dispose: true);
+
 
 builder.Services.AddSingleton(new DiscordSocketConfig
 {
