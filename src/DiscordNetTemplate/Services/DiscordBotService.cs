@@ -1,9 +1,16 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Discord;
+using Discord.Interactions;
+using Discord.WebSocket;
+
+using DiscordNetTemplate.Options;
+
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace DiscordNetTemplate.Services;
 
-public class DiscordBotService(DiscordSocketClient client, InteractionService interactions, IConfiguration config, ILogger<DiscordBotService> logger,
-    InteractionHandler interactionHandler) : BackgroundService
+public class DiscordBotService(DiscordSocketClient client, InteractionService interactions, ILogger<DiscordBotService> logger, IOptions<DiscordBotOptions> options) : BackgroundService
 {
     protected override Task ExecuteAsync(CancellationToken cancellationToken)
     {
@@ -12,8 +19,7 @@ public class DiscordBotService(DiscordSocketClient client, InteractionService in
         client.Log += LogAsync;
         interactions.Log += LogAsync;
 
-        return interactionHandler.InitializeAsync()
-            .ContinueWith(t => client.LoginAsync(TokenType.Bot, config["Secrets:Discord"]), cancellationToken)
+        return client.LoginAsync(TokenType.Bot, options.Value.Token)
             .ContinueWith(t => client.StartAsync(), cancellationToken);
     }
 
@@ -30,7 +36,9 @@ public class DiscordBotService(DiscordSocketClient client, InteractionService in
     {
         logger.LogInformation("Logged as {User}", client.CurrentUser);
 
-        await interactions.RegisterCommandsGloballyAsync();
+        var commands = await interactions.RegisterCommandsGloballyAsync();
+
+        logger.LogInformation("Registered {Count} commands", commands.Count);
     }
 
     public Task LogAsync(LogMessage msg)

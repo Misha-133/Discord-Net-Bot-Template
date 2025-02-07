@@ -1,4 +1,7 @@
-﻿namespace DiscordNetTemplate.Modules;
+﻿using Discord.Interactions;
+using Microsoft.Extensions.Logging;
+
+namespace DiscordNetTemplate.Modules;
 
 public class CommandModule : InteractionModuleBase<SocketInteractionContext>
 {

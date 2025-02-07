@@ -1,10 +1,15 @@
 using System.Reflection;
+using Discord;
+using Discord.Interactions;
+using Discord.WebSocket;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace DiscordNetTemplate.Services;
 
-public class InteractionHandler(DiscordSocketClient client, InteractionService interactionService, IServiceProvider services, ILogger<InteractionHandler> logger)
+public class InteractionHandler(DiscordSocketClient client, InteractionService interactionService, IServiceProvider services, ILogger<InteractionHandler> logger) : BackgroundService
 {
-    public async Task InitializeAsync()
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await interactionService.AddModulesAsync(Assembly.GetEntryAssembly(), services);
 
